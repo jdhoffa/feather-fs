@@ -2,3 +2,4 @@
 members = [
     "featherfs-core",
 ]
+resolver = "2"
