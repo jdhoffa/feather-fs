@@ -1,6 +1,5 @@
-[package]
-name = "feather-fs"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
+[workspace]
+members = [
+    "featherfs-core",
+]
+resolver = "2"
