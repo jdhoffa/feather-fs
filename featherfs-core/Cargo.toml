@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+arrow = "55.1.0"
+log = "0.4.27"
+parquet = "55.1.0"
