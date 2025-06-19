@@ -14,10 +14,12 @@ fn visit_dir(dir: &Path, files: &mut Vec<PathBuf>, exts: &[&str]) {
     if let Ok(entries) = fs::read_dir(dir) {
         for entry in entries.flatten() {
             let path = entry.path();
-            if path.is_dir() {
+            if path.is_dir() && !is_hidden(&path) {
                 visit_dir(&path, files, exts);
+            } else if is_hidden(&path) {
+                continue; // Skip hidden files
             } else if let Some(ext) = path.extension().and_then(|e| e.to_str()) {
-                if exts.contains(&ext) && !is_hidden(&path) {
+                if exts.contains(&ext) {
                     if let Ok(abs_path) = path.canonicalize() {
                         files.push(abs_path);
                     }
@@ -51,18 +53,42 @@ mod tests {
         let tmp_dir = tempfile::tempdir().unwrap();
         let root = tmp_dir.path();
 
-        // Create supported files
-        let supported = [
-            "a.arrow",
-            "b.feather",
-            "c.parquet",
-            "subdir/d.arrow",
-            "subdir/.hidden.arrow",
-            ".hidden.feather",
-            "subdir2/e.txt",
+        // Visible files and dirs
+        let visible_files = ["a.arrow", "b.feather", "c.parquet", "subdir/d.arrow"];
+
+        // Hidden files and dirs
+        let hidden_files = [".hidden.arrow", "subdir/.hidden2.feather", ".tmp.parquet"];
+        let hidden_dirs = [
+            ".venv/e.arrow",
+            ".hidden_dir/f.feather",
+            ".cache/data.parquet",
         ];
 
-        for file in &supported {
+        for file in &visible_files {
+            let file_path = root.join(file);
+            if let Some(parent) = file_path.parent() {
+                fs::create_dir_all(parent).unwrap();
+            }
+            File::create(&file_path)
+                .unwrap()
+                .write_all(b"test")
+                .unwrap();
+        }
+
+        // Create hidden files
+        for file in &hidden_files {
+            let file_path = root.join(file);
+            if let Some(parent) = file_path.parent() {
+                fs::create_dir_all(parent).unwrap();
+            }
+            File::create(&file_path)
+                .unwrap()
+                .write_all(b"test")
+                .unwrap();
+        }
+
+        // Create hidden directories and files within them
+        for file in &hidden_dirs {
             let file_path = root.join(file);
             if let Some(parent) = file_path.parent() {
                 fs::create_dir_all(parent).unwrap();
@@ -83,14 +109,25 @@ mod tests {
             })
             .collect();
 
-        // Should find only non-hidden supported files
-        assert!(found_files.contains(&"a.arrow".to_string()));
-        assert!(found_files.contains(&"b.feather".to_string()));
-        assert!(found_files.contains(&"c.parquet".to_string()));
-        assert!(found_files.contains(&"d.arrow".to_string()));
-        assert!(!found_files.contains(&".hidden.arrow".to_string()));
-        assert!(!found_files.contains(&".hidden.feather".to_string()));
-        assert!(!found_files.contains(&"e.txt".to_string()));
+        // Should find only visible files in visible directories
+        for file in &["a.arrow", "b.feather", "c.parquet", "d.arrow"] {
+            assert!(found_files.contains(&file.to_string()), "Missing {file}");
+        }
+
+        // Should NOT find hidden files or files in hidden directories
+        for file in &[
+            ".hidden.arrow",
+            ".hidden2.feather",
+            ".tmp.parquet",
+            "e.arrow",
+            "f.feather",
+            "data.parquet",
+        ] {
+            assert!(
+                !found_files.contains(&file.to_string()),
+                "Should not find hidden or nested file: {file}"
+            );
+        }
     }
 
     #[test]
