@@ -2,4 +2,4 @@
 members = [
     "quiverfs-core",
 ]
-resolver = "2"
+resolver = "3"
