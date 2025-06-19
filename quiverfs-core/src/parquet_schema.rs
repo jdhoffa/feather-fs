@@ -16,8 +16,7 @@ fn extract_fields(schema: &Type) -> Vec<serde_json::Value> {
         } => {
             let name = schema.name();
             let type_str = format!("{:?}", physical_type);
-            let nullable =
-                !basic_info.has_repetition() || basic_info.repetition() == Repetition::OPTIONAL;
+            let nullable = basic_info.repetition() == Repetition::OPTIONAL;
             vec![json!({
                 "name": name,
                 "type": type_str,
