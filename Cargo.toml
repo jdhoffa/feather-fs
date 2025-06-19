@@ -1,5 +1,6 @@
 [workspace]
-members = [
+members = [ "quiverfs-cli",
     "quiverfs-core",
+    "quiverfs-cli",
 ]
 resolver = "3"

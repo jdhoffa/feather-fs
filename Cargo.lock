@@ -846,6 +846,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "quiverfs-cli"
+version = "0.1.0"
+
+[[package]]
 name = "quiverfs-core"
 version = "0.1.0"
 dependencies = [
