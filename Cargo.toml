@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "featherfs-core",
+    "quiverfs-core",
 ]
 resolver = "2"
