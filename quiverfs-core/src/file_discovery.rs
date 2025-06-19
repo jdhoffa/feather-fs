@@ -111,7 +111,7 @@ mod tests {
 
         // Should find only visible files in visible directories
         for file in &["a.arrow", "b.feather", "c.parquet", "d.arrow"] {
-            assert!(found_files.contains(&file.to_string()), &format!("Missing {}", file));
+            assert!(found_files.contains(&file.to_string()), "Missing {file}");
         }
 
         // Should NOT find hidden files or files in hidden directories
