@@ -1,4 +1,6 @@
 # quiver-fs
+[![Rust](https://github.com/jdhoffa/quiver-fs/actions/workflows/rust.yml/badge.svg)](https://github.com/jdhoffa/quiver-fs/actions/workflows/rust.yml)
+
 A virtual filesystem that mounts a directory of Arrow or Parquet files as a structured set of virtual tables.
 
 ## Requirements
