@@ -4,6 +4,8 @@ use quiverfs_core::common_schema::{
 };
 use quiverfs_core::file_discovery::discover_data_files;
 use std::path::PathBuf;
+use tracing::{error, info};
+use tracing_subscriber;
 
 #[derive(Parser)]
 #[command(name = "featherfs")]
@@ -23,13 +25,16 @@ enum Commands {
 }
 
 fn main() {
+    // Initialize structured logging
+    tracing_subscriber::fmt::init();
+
     let cli = Cli::parse();
 
     match &cli.command {
         Commands::Inspect { dir } => {
             let files = discover_data_files(dir);
             if files.is_empty() {
-                eprintln!("No Arrow or Parquet files found in {:?}", dir);
+                error!("No Arrow or Parquet files found in {:?}", dir);
                 std::process::exit(1);
             }
             for file in files {
@@ -44,10 +49,11 @@ fn main() {
                 };
                 match res {
                     Ok(schema) => {
+                        info!(file = %path, "Schema parsed successfully");
                         println!("File: {path}\nSchema:\n{schema}\n");
                     }
                     Err(e) => {
-                        eprintln!("File: {path}\nError: {e}\n");
+                        error!(file = %path, error = %e, "Failed to parse schema");
                     }
                 }
             }
