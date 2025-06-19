@@ -7,3 +7,6 @@ edition = "2021"
 arrow = "55.1.0"
 log = "0.4.27"
 parquet = "55.1.0"
+
+[dev-dependencies]
+tempfile = "3.20.0"
