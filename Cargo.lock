@@ -449,17 +449,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
 
 [[package]]
-name = "featherfs-core"
-version = "0.1.0"
-dependencies = [
- "arrow",
- "log",
- "parquet",
- "serde_json",
- "tempfile",
-]
-
-[[package]]
 name = "flatbuffers"
 version = "25.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -854,6 +843,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "quiverfs-core"
+version = "0.1.0"
+dependencies = [
+ "arrow",
+ "log",
+ "parquet",
+ "serde_json",
+ "tempfile",
 ]
 
 [[package]]
