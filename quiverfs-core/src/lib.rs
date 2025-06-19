@@ -1,4 +1,5 @@
 pub mod arrow_schema;
+pub mod common_schema;
 pub mod file_discovery;
 pub mod parquet_schema;
 
