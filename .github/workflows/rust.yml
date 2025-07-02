@@ -16,6 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install FUSE dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libfuse-dev fuse
     - name: Build
       run: cargo build --verbose
     - name: Run tests
