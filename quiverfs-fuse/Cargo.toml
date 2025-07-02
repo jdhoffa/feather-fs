@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 fuser = "0.15.1"
 libc = "0.2.174"
+walkdir = "2.5.0"
